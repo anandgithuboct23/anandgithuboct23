@@ -1,0 +1,63 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "DF-demo-adf"
+		},
+		"Dynamic_SQL_connectionString": {
+			"value": ""
+		},
+		"LS_ADB_accessToken": {
+			"value": ""
+		},
+		"LS_ADB2_accessToken": {
+			"value": ""
+		},
+		"LS_SQL_connectionString": {
+			"value": ""
+		},
+		"LS_SQL2_connectionString": {
+			"value": ""
+		},
+		"LS_blobstorage_connectionString": {
+			"value": ""
+		},
+		"LS_blobstorage2_connectionString": {
+			"value": ""
+		},
+		"LS_blobtoBlob_connectionString": {
+			"value": ""
+		},
+		"SqlServer1_connectionString": {
+			"value": "Integrated Security=True;Data Source=ANAND\\SQLEXPRESS;Initial Catalog=ADFMAR"
+		},
+		"SqlServer1_password": {
+			"value": ""
+		},
+		"LS_ADB_properties_typeProperties_existingClusterId": {
+			"value": "0907-024045-jccebknq"
+		},
+		"LS_ADB2_properties_typeProperties_existingClusterId": {
+			"value": "0907-023700-dxtszios"
+		},
+		"SqlServer1_properties_typeProperties_userName": {
+			"value": "sa"
+		},
+		"Eventtrigger_properties_typeProperties_scope": {
+			"value": "/subscriptions/5da96805-9541-48e9-a7f8-6f9cd06d52a6/resourceGroups/RG-demo/providers/Microsoft.Storage/storageAccounts/stgacctdemo"
+		},
+		"Tumbling_properties_pipeline_parameters_tableinput": {
+			"value": "Cust"
+		},
+		"Tumbling_properties_pipeline_parameters_windowStartTime": {
+			"value": "@trigger().outputs.windowStartTime"
+		},
+		"Tumbling_properties_pipeline_parameters_windowEndTime": {
+			"value": "@trigger().outputs.windowEndTime"
+		},
+		"deleteevent_properties_typeProperties_scope": {
+			"value": "/subscriptions/5da96805-9541-48e9-a7f8-6f9cd06d52a6/resourceGroups/RG-demo/providers/Microsoft.Storage/storageAccounts/stgacctdemo"
+		}
+	}
+}
