@@ -1,0 +1,25 @@
+{
+	"name": "9 AMEVERYDAY",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "ScheduleTrigger",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2023-09-04T04:49:00",
+				"endTime": "2023-09-05T04:49:00",
+				"timeZone": "India Standard Time"
+			}
+		}
+	}
+}

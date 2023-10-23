@@ -1,0 +1,34 @@
+{
+	"name": "MANAGER2DATASET",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_blobstorage2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "manager2.csv",
+				"folderPath": "Input Folder",
+				"container": "newempdataset"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "MANAGER_ID",
+				"type": "String"
+			},
+			{
+				"name": "MANAGER_NAME",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

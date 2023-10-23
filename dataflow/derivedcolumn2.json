@@ -1,0 +1,82 @@
+{
+	"name": "derivedcolumn2",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Empdataset",
+						"type": "DatasetReference"
+					},
+					"name": "Empdataset"
+				},
+				{
+					"dataset": {
+						"referenceName": "Deptdataset",
+						"type": "DatasetReference"
+					},
+					"name": "deparmentataset"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "outputnew",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "lookup1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          EMPLOYEE_ID as string,",
+				"          NAME as string,",
+				"          HIRE_DATE as string,",
+				"          SALARY as string,",
+				"          DEPARTMENT_ID as string,",
+				"          LOCATION_ID as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> Empdataset",
+				"source(output(",
+				"          DEPARTMENT_ID as string,",
+				"          DEPARTMENT_NAME as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> deparmentataset",
+				"lookup1 derive(NEW_SALARY = toInteger(iif(DEPARTMENT_NAME==\"HR\",toInteger(SALARY)*1.2,toInteger(SALARY)*1.1))) ~> derivedColumn1",
+				"Empdataset, deparmentataset lookup(Empdataset@DEPARTMENT_ID == deparmentataset@DEPARTMENT_ID,",
+				"     multiple: false,",
+				"     pickup: 'first',",
+				"     asc(deparmentataset@DEPARTMENT_ID, true),",
+				"     broadcast: 'auto')~> lookup1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          EMPLOYEE_ID as string,",
+				"          FIRST_NAME as string,",
+				"          LAST_NAME as string,",
+				"          SALARY as string,",
+				"          DEPARTMENT_ID as string,",
+				"          LOCATION_ID as string,",
+				"          HIRE_DATE as string",
+				"     ),",
+				"     partitionFileNames:['derivedcol2.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

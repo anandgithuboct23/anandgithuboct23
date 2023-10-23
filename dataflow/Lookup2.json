@@ -1,0 +1,74 @@
+{
+	"name": "Lookup2",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "lookup1",
+						"type": "DatasetReference"
+					},
+					"name": "lookup1"
+				},
+				{
+					"dataset": {
+						"referenceName": "lookup2",
+						"type": "DatasetReference"
+					},
+					"name": "lookup2"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "outputnew",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "lookup3"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Empid as string,",
+				"          Name as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> lookup1",
+				"source(output(",
+				"          Empid as string,",
+				"          Dept as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> lookup2",
+				"lookup1, lookup2 lookup(lookup1@Empid == lookup2@Empid,",
+				"     multiple: false,",
+				"     pickup: 'first',",
+				"     asc(Dept, true),",
+				"     broadcast: 'auto')~> lookup3",
+				"lookup3 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          EMPLOYEE_ID as string,",
+				"          FIRST_NAME as string,",
+				"          LAST_NAME as string,",
+				"          SALARY as string,",
+				"          DEPARTMENT_ID as string,",
+				"          LOCATION_ID as string,",
+				"          HIRE_DATE as string",
+				"     ),",
+				"     partitionFileNames:['lookup2.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

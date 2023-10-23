@@ -1,0 +1,39 @@
+{
+	"name": "SCD2_INPUT",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SQL2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "EMPID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NAME",
+				"type": "varchar"
+			},
+			{
+				"name": "DESIGNATION",
+				"type": "varchar"
+			},
+			{
+				"name": "DEPARTMENT",
+				"type": "varchar"
+			},
+			{
+				"name": "START_DATE",
+				"type": "date"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "SCD2_INPUT"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

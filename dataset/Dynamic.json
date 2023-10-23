@@ -1,0 +1,39 @@
+{
+	"name": "Dynamic",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SQL2",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"tableinput": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CustName",
+				"type": "varchar"
+			},
+			{
+				"name": "TrxnDate",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": {
+				"value": "@dataset().tableinput",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
