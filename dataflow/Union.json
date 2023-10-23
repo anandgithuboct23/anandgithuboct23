@@ -1,0 +1,39 @@
+{
+	"name": "Union",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Mgr1dataset",
+						"type": "DatasetReference"
+					},
+					"name": "Manager1"
+				},
+				{
+					"dataset": {
+						"referenceName": "Mgr2dataset",
+						"type": "DatasetReference"
+					},
+					"name": "Manager2"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Output",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Union"
+				}
+			],
+			"script": "source(output(\n\t\tMANAGER_ID as string,\n\t\tMANAGER_NAME as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Manager1\nsource(output(\n\t\tMANAGER_ID as string,\n\t\tMANAGER_NAME as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Manager2\nManager1, Manager2 union(byName: true)~> Union\nUnion sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['Union.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1"
+		}
+	}
+}

@@ -1,0 +1,42 @@
+{
+	"name": "Emp_blob_input",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_blobstorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Emp_daily_input.csv",
+				"folderPath": "Input",
+				"container": "dailyempdata"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "EMPID",
+				"type": "String"
+			},
+			{
+				"name": "EMPNAME",
+				"type": "String"
+			},
+			{
+				"name": "DEPARTMENT",
+				"type": "String"
+			},
+			{
+				"name": "DESIGNATION",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

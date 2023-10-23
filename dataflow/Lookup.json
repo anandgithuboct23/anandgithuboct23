@@ -1,0 +1,39 @@
+{
+	"name": "Lookup",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Empdataset",
+						"type": "DatasetReference"
+					},
+					"name": "Empdataset"
+				},
+				{
+					"dataset": {
+						"referenceName": "Deptdataset",
+						"type": "DatasetReference"
+					},
+					"name": "Deptdataset"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Output",
+						"type": "DatasetReference"
+					},
+					"name": "sink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Lookup"
+				}
+			],
+			"script": "source(output(\n\t\tEMPLOYEE_ID as string,\n\t\tNAME as string,\n\t\tHIRE_DATE as string,\n\t\tSALARY as string,\n\t\tDEPARTMENT_ID as string,\n\t\tLOCATION_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Empdataset\nsource(output(\n\t\tDEPARTMENT_ID as string,\n\t\tDEPARTMENT_NAME as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Deptdataset\nEmpdataset, Deptdataset lookup(Empdataset@DEPARTMENT_ID == Deptdataset@DEPARTMENT_ID,\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> Lookup\nLookup sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['Lookup.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink"
+		}
+	}
+}

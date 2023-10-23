@@ -1,0 +1,50 @@
+{
+	"name": "sqlemp2table",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SQL",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "EMPLOYEE_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "FIRST_NAME",
+				"type": "varchar"
+			},
+			{
+				"name": "LAST_NAME",
+				"type": "varchar"
+			},
+			{
+				"name": "SALARY",
+				"type": "varchar"
+			},
+			{
+				"name": "DEPARTMENT_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "LOCATION_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "HIRE_DATE",
+				"type": "varchar"
+			},
+			{
+				"name": "DEPARTMENT_NAME",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "EMPLOYEE2"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

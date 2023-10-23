@@ -1,0 +1,81 @@
+{
+	"name": "Non equi join",
+	"properties": {
+		"folder": {
+			"name": "Demo"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Empdataset",
+						"type": "DatasetReference"
+					},
+					"name": "empdataset"
+				},
+				{
+					"dataset": {
+						"referenceName": "Deptdataset",
+						"type": "DatasetReference"
+					},
+					"name": "deptdataset"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "outputnew",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "join1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          EMPLOYEE_ID as string,",
+				"          NAME as string,",
+				"          HIRE_DATE as string,",
+				"          SALARY as integer,",
+				"          DEPARTMENT_ID as string,",
+				"          LOCATION_ID as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> empdataset",
+				"source(output(",
+				"          DEPARTMENT_ID as string,",
+				"          DEPARTMENT_NAME as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> deptdataset",
+				"empdataset, deptdataset join(empdataset@DEPARTMENT_ID == deptdataset@DEPARTMENT_ID,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          EMPLOYEE_ID as string,",
+				"          FIRST_NAME as string,",
+				"          LAST_NAME as string,",
+				"          SALARY as string,",
+				"          DEPARTMENT_ID as string,",
+				"          LOCATION_ID as string,",
+				"          HIRE_DATE as string",
+				"     ),",
+				"     partitionFileNames:['new branch.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

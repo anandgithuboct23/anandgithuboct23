@@ -1,0 +1,151 @@
+{
+	"name": "SCD2",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "SCD2_INPUT",
+						"type": "DatasetReference"
+					},
+					"name": "scd2input"
+				},
+				{
+					"dataset": {
+						"referenceName": "SCD2_OUTPUT",
+						"type": "DatasetReference"
+					},
+					"name": "scd2output"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "SCD2_OUTPUT",
+						"type": "DatasetReference"
+					},
+					"name": "SINKUPDATEEXISTING"
+				},
+				{
+					"dataset": {
+						"referenceName": "SCD2_OUTPUT",
+						"type": "DatasetReference"
+					},
+					"name": "SINKINSERTNEW"
+				}
+			],
+			"transformations": [
+				{
+					"name": "join1"
+				},
+				{
+					"name": "filter1"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "derivedColumn2"
+				},
+				{
+					"name": "alterRow1"
+				},
+				{
+					"name": "alterRow2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          EMPID as integer,",
+				"          NAME as string,",
+				"          DESIGNATION as string,",
+				"          DEPARTMENT as string,",
+				"          START_DATE as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> scd2input",
+				"source(output(",
+				"          EMPID as integer,",
+				"          NAME as string,",
+				"          DESIGNATION as string,",
+				"          DEPARTMENT as string,",
+				"          START_DATE as date,",
+				"          END_DATE as date,",
+				"          ACTIVE_FLAG as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> scd2output",
+				"scd2input, scd2output join(scd2input@EMPID == scd2output@EMPID,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1 filter(ACTIVE_FLAG==\"Y\") ~> filter1",
+				"scd2input derive(END_DATE = toDate('2100-12-31', 'yyyy-MM-dd'),",
+				"          ACTIVE_FLAG = \"Y\") ~> derivedColumn1",
+				"filter1 select(mapColumn(",
+				"          EMPID = scd2output@EMPID,",
+				"          NAME = scd2output@NAME,",
+				"          DESIGNATION = scd2output@DESIGNATION,",
+				"          DEPARTMENT = scd2output@DEPARTMENT,",
+				"          START_DATE = scd2output@START_DATE,",
+				"          END_DATE = scd2input@START_DATE",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 derive(ACTIVE_FLAG = \"N\") ~> derivedColumn2",
+				"derivedColumn2 alterRow(updateIf(true())) ~> alterRow1",
+				"derivedColumn1 alterRow(insertIf(true())) ~> alterRow2",
+				"alterRow1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          EMPID as integer,",
+				"          NAME as string,",
+				"          DESIGNATION as string,",
+				"          DEPARTMENT as string,",
+				"          START_DATE as date,",
+				"          END_DATE as date,",
+				"          ACTIVE_FLAG as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:false,",
+				"     updateable:true,",
+				"     upsertable:false,",
+				"     keys:['EMPID','START_DATE'],",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> SINKUPDATEEXISTING",
+				"alterRow2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          EMPID as integer,",
+				"          NAME as string,",
+				"          DESIGNATION as string,",
+				"          DEPARTMENT as string,",
+				"          START_DATE as date,",
+				"          END_DATE as date,",
+				"          ACTIVE_FLAG as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 2,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> SINKINSERTNEW"
+			]
+		}
+	}
+}

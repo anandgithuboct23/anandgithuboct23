@@ -1,0 +1,35 @@
+{
+	"name": "Derivedcolumn",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Empdataset",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Output",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "DerivedColumn1"
+				},
+				{
+					"name": "Select1"
+				}
+			],
+			"script": "source(output(\n\t\tEMPLOYEE_ID as string,\n\t\tNAME as string,\n\t\tHIRE_DATE as string,\n\t\tSALARY as integer,\n\t\tDEPARTMENT_ID as string,\n\t\tLOCATION_ID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 derive(New_Salary = toInteger(SALARY+(SALARY*0.1))) ~> DerivedColumn1\nDerivedColumn1 select(mapColumn(\n\t\tEMPLOYEE_ID,\n\t\tNAME,\n\t\tHIRE_DATE,\n\t\tSALARY,\n\t\t{New Salary} = New_Salary\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['Derivedcolumn.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1"
+		}
+	}
+}
