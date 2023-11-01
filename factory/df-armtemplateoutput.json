@@ -1,0 +1,9 @@
+{
+	"name": "df-armtemplateoutput",
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "3cc35ce9-bff4-4a14-b7d2-fce7027701c6",
+		"tenantId": "e7ffe595-d505-4bf1-98d7-02b5d1d15516"
+	}
+}
