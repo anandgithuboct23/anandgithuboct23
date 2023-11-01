@@ -1,0 +1,256 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "df-armtemplateoutput"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
+		},
+		"Dynamic_SQL_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'Dynamic_SQL'"
+		},
+		"LS_ADB_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'LS_ADB'"
+		},
+		"LS_ADB2_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'LS_ADB2'"
+		},
+		"LS_SQL_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_SQL'"
+		},
+		"LS_SQL2_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_SQL2'"
+		},
+		"LS_blobstorage_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_blobstorage'"
+		},
+		"LS_blobstorage2_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_blobstorage2'"
+		},
+		"LS_blobtoBlob_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_blobtoBlob'"
+		},
+		"SqlServer1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SqlServer1'",
+			"defaultValue": "Integrated Security=True;Data Source=ANAND\\SQLEXPRESS;Initial Catalog=ADFMAR"
+		},
+		"SqlServer1_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'SqlServer1'"
+		},
+		"LS_ADB_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0907-024045-jccebknq"
+		},
+		"LS_ADB2_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0907-023700-dxtszios"
+		},
+		"SqlServer1_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "sa"
+		},
+		"Eventtrigger_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/5da96805-9541-48e9-a7f8-6f9cd06d52a6/resourceGroups/RG-demo/providers/Microsoft.Storage/storageAccounts/stgacctdemo"
+		},
+		"Tumbling_properties_pipeline_parameters_tableinput": {
+			"type": "string",
+			"defaultValue": "Cust"
+		},
+		"Tumbling_properties_pipeline_parameters_windowStartTime": {
+			"type": "string",
+			"defaultValue": "@trigger().outputs.windowStartTime"
+		},
+		"Tumbling_properties_pipeline_parameters_windowEndTime": {
+			"type": "string",
+			"defaultValue": "@trigger().outputs.windowEndTime"
+		},
+		"deleteevent_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/5da96805-9541-48e9-a7f8-6f9cd06d52a6/resourceGroups/RG-demo/providers/Microsoft.Storage/storageAccounts/stgacctdemo"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "df-armtemplateoutput_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"AzureBlobStorage1_connectionString": {
+						"value": "[parameters('AzureBlobStorage1_connectionString')]"
+					},
+					"Dynamic_SQL_connectionString": {
+						"value": "[parameters('Dynamic_SQL_connectionString')]"
+					},
+					"LS_ADB_accessToken": {
+						"value": "[parameters('LS_ADB_accessToken')]"
+					},
+					"LS_ADB2_accessToken": {
+						"value": "[parameters('LS_ADB2_accessToken')]"
+					},
+					"LS_SQL2_connectionString": {
+						"value": "[parameters('LS_SQL2_connectionString')]"
+					},
+					"LS_blobstorage_connectionString": {
+						"value": "[parameters('LS_blobstorage_connectionString')]"
+					},
+					"LS_blobstorage2_connectionString": {
+						"value": "[parameters('LS_blobstorage2_connectionString')]"
+					},
+					"LS_blobtoBlob_connectionString": {
+						"value": "[parameters('LS_blobtoBlob_connectionString')]"
+					},
+					"LS_ADB_properties_typeProperties_existingClusterId": {
+						"value": "[parameters('LS_ADB_properties_typeProperties_existingClusterId')]"
+					},
+					"LS_ADB2_properties_typeProperties_existingClusterId": {
+						"value": "[parameters('LS_ADB2_properties_typeProperties_existingClusterId')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "df-armtemplateoutput_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'df-armtemplateoutput_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "df-armtemplateoutput_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"LS_SQL_connectionString": {
+						"value": "[parameters('LS_SQL_connectionString')]"
+					},
+					"SqlServer1_connectionString": {
+						"value": "[parameters('SqlServer1_connectionString')]"
+					},
+					"SqlServer1_password": {
+						"value": "[parameters('SqlServer1_password')]"
+					},
+					"SqlServer1_properties_typeProperties_userName": {
+						"value": "[parameters('SqlServer1_properties_typeProperties_userName')]"
+					},
+					"deleteevent_properties_typeProperties_scope": {
+						"value": "[parameters('deleteevent_properties_typeProperties_scope')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'df-armtemplateoutput_ArmTemplate_1')]"
+			]
+		},
+		{
+			"name": "df-armtemplateoutput_ArmTemplate_3",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_3.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"Eventtrigger_properties_typeProperties_scope": {
+						"value": "[parameters('Eventtrigger_properties_typeProperties_scope')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'df-armtemplateoutput_ArmTemplate_2')]"
+			]
+		},
+		{
+			"name": "df-armtemplateoutput_ArmTemplate_4",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_4.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"Tumbling_properties_pipeline_parameters_tableinput": {
+						"value": "[parameters('Tumbling_properties_pipeline_parameters_tableinput')]"
+					},
+					"Tumbling_properties_pipeline_parameters_windowStartTime": {
+						"value": "[parameters('Tumbling_properties_pipeline_parameters_windowStartTime')]"
+					},
+					"Tumbling_properties_pipeline_parameters_windowEndTime": {
+						"value": "[parameters('Tumbling_properties_pipeline_parameters_windowEndTime')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'df-armtemplateoutput_ArmTemplate_3')]"
+			]
+		}
+	]
+}
