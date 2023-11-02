@@ -1,0 +1,82 @@
+{
+	"name": "TUMBLING_NOV23",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[dbo].[TUMBLING_WINDOW_PROC]",
+						"storedProcedureParameters": {
+							"ENDDATE": {
+								"type": "String",
+								"value": {
+									"value": "@pipeline().parameters.endate",
+									"type": "Expression"
+								}
+							},
+							"STARTDATE": {
+								"type": "String",
+								"value": {
+									"value": "@pipeline().parameters.startdate",
+									"type": "Expression"
+								}
+							}
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "SCD1_INPUT",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Dynamic_sql_inputtable",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": "Tumbling_Cust"
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"startdate": {
+				"type": "string"
+			},
+			"endate": {
+				"type": "string"
+			}
+		},
+		"annotations": []
+	}
+}
